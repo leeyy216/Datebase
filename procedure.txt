@@ -1,0 +1,69 @@
+create PROCEDURE bosslyy( )
+BEGIN
+DECLARE a datetime;
+DECLARE b datetime;
+DECLARE c datetime;
+DECLARE d int;
+DECLARE _stop int;
+DECLARE a_cursor CURSOR for select b_handle_time,f_handle_time,g_handle_time,num from yemp_boss;
+DECLARE CONTINUE HANDLER for not found set _stop=1;
+open a_cursor;
+start TRANSACTION;
+FETCH a_cursor into a,b,c,d;
+while _stop<>1
+do
+set d=0;
+if a is not null 
+then 
+set d =  DATEDIFF('c','a');
+update yemp_boss set num = d where yemp_boss.g_handle_time=c and yemp_boss.b_handle_time = a;
+ELSE
+if b is not NULL
+then
+set d = DATEDIFF('c','b'); 
+update yemp_boss set num = d where yemp_boss.g_handle_time=c and yemp_boss.b_handle_time = b;
+ELSE
+update yemp_boss set num = 0 where yemp_boss.f_handle_time is null  and yemp_boss.b_handle_time is null;
+END if;
+end IF;
+FETCH a_cursor into a,b,c,d;
+end while;
+commit;
+END;
+update yemp_boss set num=0 
+call bosslyy
+select * from yemp_boss
+drop procedure bosslyy
+
+
+#boss1_computedatediff
+#
+BEGIN
+DECLARE a datetime;
+DECLARE b datetime;
+DECLARE c datetime;
+DECLARE d int;
+DECLARE _stop int default 0;
+DECLARE a_cursor CURSOR for select b_handle_time,f_handle_time,g_handle_time from yemp_boss;
+DECLARE CONTINUE HANDLER for not found set _stop=1;
+open a_cursor;
+start TRANSACTION;
+FETCH a_cursor into a,b,c;
+while _stop <> 1
+do
+if a is not null and c is not null
+then 
+set d =  DATEDIFF(c,a)+1;
+update yemp_boss set num = d where yemp_boss.g_handle_time=c and yemp_boss.b_handle_time = a;
+ELSEIF b is not NULL and c is not null
+then
+set d = DATEDIFF(c,b)+1; 
+update yemp_boss set num = d where yemp_boss.g_handle_time=c and yemp_boss.b_handle_time = b;
+ELSEIF c is null
+then
+update yemp_boss set num = 0 where yemp_boss.f_handle_time is null  and yemp_boss.b_handle_time is null;
+end IF;
+FETCH a_cursor into a,b,c;
+end while;
+commit;
+END
