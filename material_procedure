@@ -1,0 +1,27 @@
+http://blog.sina.com.cn/s/blog_6d187d2701019uew.html
+mysql中查看存储过程，表，视图，函数 (2013-02-06 13:31:12)转载▼
+标签： it	分类： mysql
+一：查看存储过程
+1，show procedure status; --这个是查看所有的
+2，show create procedure proc_AllUser;  这个是查看proc_AllUser这个存储过程的具体信息
+3，select 'name' from mysql.proc where db = 'test' and 'type' = 'PROCEDURE';
+二，查看函数
+1，show function status;
+2,select 'name' from mysql.proc where db= 'test' and 'type'='function';
+三，查看视图
+1，select * from information_schema.VIEWS;
+四，查看表
+1，select * from information_schema.TABLES
+五，查看触发器
+1，语法：SHOW TRIGGERS [FROM db_name] [LIKE expr]
+      实例：SHOW TRIGGERS\G //触发器
+2，对INFORMATION_SCHEMA数据库中的TRIGGERS表查询
+    mysql>SELECT * FROM triggers T WHERE trigger_name=”mytrigger” \G
+    
+http://www.oschina.net/translate/list/10
+
+http://www.2cto.com/database/201409/330246.html
+SQL存储过程实例详解
+——database\procedure_exercise
+本文用3个题目，从建立数据库到创建存储过程，详细讲解数据库的功能。
+
